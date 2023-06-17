@@ -9,6 +9,7 @@ import 'package:write_sync/models/document_model.dart';
 import 'package:write_sync/models/error_model.dart';
 import 'package:write_sync/repository/auth_repository.dart';
 import 'package:write_sync/repository/document_repository.dart';
+import 'package:write_sync/repository/socket_repository.dart';
 
 class DocumentScreen extends ConsumerStatefulWidget {
   final String id;
@@ -23,10 +24,12 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
       TextEditingController(text: 'Untitled Document');
   quill.QuillController? _controller;
   ErrorModel? errorModel;
+  SocketRepository socketRepository = SocketRepository();
 
   @override
   void initState() {
     super.initState();
+    socketRepository.joinRoom(widget.id);
     fetchDocumentData();
   }
 
