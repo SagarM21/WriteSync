@@ -1,5 +1,5 @@
-import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:write_sync/constants.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class SocketClient {
   io.Socket? socket;
@@ -14,7 +14,7 @@ class SocketClient {
   }
 
   static SocketClient get instance {
-    _instance ?? SocketClient._internal();
+    _instance ??= SocketClient._internal();
     return _instance!;
   }
 }

@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const PORT = process.env.PORT | 3001;
 const authRouter = require("./routes/auth");
 const documentRouter = require("./routes/document");
+const Document = require("./models/document");
 
 dotenv.config();
 const app = express();
@@ -29,9 +30,23 @@ mongoose
 io.on("connection", (socket) => {
   socket.on("join", (documentId) => {
     socket.join(documentId);
-    console.log("joined");
+  });
+
+  socket.on("typing", (data) => {
+    socket.broadcast.to(data.room).emit("changes", data);
+  });
+
+  socket.on("save", (data) => {
+    saveData(data);
   });
 });
+
+const saveData = async (data) => {
+  let document = await Document.findById(data.room);
+  document.content = data.delta;
+  document = await document.save();
+};
+
 server.listen(PORT, "0.0.0.0", () => {
   console.log(`Connected at port ${PORT}`);
 });

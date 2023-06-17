@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,7 +15,10 @@ import 'package:write_sync/repository/socket_repository.dart';
 
 class DocumentScreen extends ConsumerStatefulWidget {
   final String id;
-  const DocumentScreen({super.key, required this.id});
+  const DocumentScreen({
+    Key? key,
+    required this.id,
+  }) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _DocumentScreenState();
@@ -31,12 +36,28 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     super.initState();
     socketRepository.joinRoom(widget.id);
     fetchDocumentData();
+
+    socketRepository.changeListener((data) {
+      _controller?.compose(
+        quill.Delta.fromJson(data['delta']),
+        _controller?.selection ?? const TextSelection.collapsed(offset: 0),
+        quill.ChangeSource.REMOTE,
+      );
+    });
+
+    Timer.periodic(const Duration(seconds: 2), (timer) {
+      socketRepository.autoSave(<String, dynamic>{
+        'delta': _controller!.document.toDelta(),
+        'room': widget.id,
+      });
+    });
   }
 
   void fetchDocumentData() async {
-    errorModel = await ref
-        .read(documentRepositoryProvider)
-        .getDocumentById(ref.read(userProvider)!.token, widget.id);
+    errorModel = await ref.read(documentRepositoryProvider).getDocumentById(
+          ref.read(userProvider)!.token,
+          widget.id,
+        );
 
     if (errorModel!.data != null) {
       titleController.text = (errorModel!.data as DocumentModel).title;
@@ -50,6 +71,16 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
       );
       setState(() {});
     }
+
+    _controller!.document.changes.listen((event) {
+      if (event.source == quill.ChangeSource.LOCAL) {
+        Map<String, dynamic> map = {
+          'delta': event.change,
+          'room': widget.id,
+        };
+        socketRepository.typing(map);
+      }
+    });
   }
 
   @override
@@ -100,7 +131,8 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
               ),
               label: const Text('Share'),
               style: ElevatedButton.styleFrom(
-                  backgroundColor: kBlueColor, foregroundColor: kWhiteColor),
+                backgroundColor: kBlueColor,
+              ),
             ),
           ),
         ],
