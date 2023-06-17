@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:write_sync/colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:write_sync/models/error_model.dart';
@@ -10,14 +11,12 @@ class LoginScreen extends ConsumerWidget {
 
   void signInWithGoogle(WidgetRef ref, BuildContext context) async {
     final isMessenger = ScaffoldMessenger.of(context);
-    final navigator = Navigator.of(context);
+    final navigator = Routemaster.of(context);
     final errorModel =
         await ref.read(authRepositoryProvider).signInWithGoogle();
     if (errorModel.error == null) {
       ref.read(userProvider.notifier).update((state) => errorModel.data);
-      navigator.push(
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
-      );
+      navigator.push('/');
     } else {
       isMessenger.showSnackBar(
         SnackBar(

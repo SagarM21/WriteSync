@@ -68,7 +68,7 @@ class AuthRepository {
     try {
       String? token = await _localStorageRepository.getToken();
       if (token != null) {
-        var res = await _client.post(Uri.parse('$host/'), headers: {
+        var res = await _client.get(Uri.parse('$host/'), headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': token
         });
