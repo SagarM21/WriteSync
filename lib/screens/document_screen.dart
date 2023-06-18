@@ -1,17 +1,17 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:routemaster/routemaster.dart';
 import 'package:write_sync/colors.dart';
-import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:write_sync/common/widgets/loader.dart';
 import 'package:write_sync/models/document_model.dart';
 import 'package:write_sync/models/error_model.dart';
 import 'package:write_sync/repository/auth_repository.dart';
 import 'package:write_sync/repository/document_repository.dart';
 import 'package:write_sync/repository/socket_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:routemaster/routemaster.dart';
 
 class DocumentScreen extends ConsumerStatefulWidget {
   final String id;
@@ -131,8 +131,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
               ),
               label: const Text('Share'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: kBlueColor,
-              ),
+                  backgroundColor: kBlueColor, foregroundColor: kWhiteColor),
             ),
           ),
         ],
@@ -151,7 +150,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
               ),
               const SizedBox(width: 10),
               SizedBox(
-                width: 180,
+                width: 150,
                 child: TextField(
                   controller: titleController,
                   decoration: const InputDecoration(

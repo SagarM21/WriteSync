@@ -1,5 +1,6 @@
-import 'package:write_sync/clients/socket_client.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:write_sync/clients/socket_client.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 class SocketRepository {
   final _socketClient = SocketClient.instance.socket!;

@@ -2,15 +2,19 @@
 
 A new Flutter project.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- Google Authentication
+- Riverpod for state management
+- Backend using node.js
+- Socket functionality for multiple users to write simultaneously and it will be saved in every 2 seconds.
+- Used flutter_quill for the editor.
+- Create/Update/View docs.
+- Collaborative editing - to be fixed
+- Link Sharing
+- Auto savings
 
-A few resources to get you started if this is your first Flutter project:
+## Tech Stack
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Frontend: Flutter, Riverpod
+- Backend: Node, Express, Mongoose, MongoDB, SocketIO
